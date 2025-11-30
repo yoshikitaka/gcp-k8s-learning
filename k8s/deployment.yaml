@@ -16,9 +16,15 @@ spec:
     spec:
       containers:
       - name: go-app
-        image: us-central1-docker.pkg.dev/k8s-learning-479716/app-repo/go-app:v1
+        image: us-central1-docker.pkg.dev/k8s-learning-479716/app-repo/go-app:v2
         ports:
         - containerPort: 8080
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: my-secret
+              key: api-key
         resources:
           requests:
             cpu: "100m"

@@ -9,7 +9,20 @@ import (
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello from GKE! Hostname: %s\n", os.Getenv("HOSTNAME"))
+		hostname := os.Getenv("HOSTNAME")
+		apiKey := os.Getenv("API_KEY")
+
+		// Mask the API key for security (show only first 4 and last 4 chars)
+		maskedKey := "not set"
+		if apiKey != "" {
+			if len(apiKey) > 8 {
+				maskedKey = apiKey[:4] + "..." + apiKey[len(apiKey)-4:]
+			} else {
+				maskedKey = "***"
+			}
+		}
+
+		fmt.Fprintf(w, "Hello from GKE! (v3 - CI/CD Verified)\nHostname: %s\nAPI Key: %s\n", hostname, maskedKey)
 	})
 
 	port := os.Getenv("PORT")
